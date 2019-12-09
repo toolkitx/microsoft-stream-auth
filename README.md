@@ -1,4 +1,4 @@
-## microsoft-stream-auth
+## @toolkitx/microsoft-stream-auth
 
 A **temporary**, **light-weight**, **high-performance** solution to get access token of Microsoft Stream without any browser technologies like Chrome/Selenium.
 
@@ -11,13 +11,13 @@ The `microsoft-stream-auth` go through the login flow by sending HTTP requests. 
 ### Installation
 
 ```bash
-npm install microsoft-stream-auth
+npm install @toolkitx/microsoft-stream-auth
 ```
 
 ### Simple to use
 
 ```javascript
-const streamAuth = require('microsoft-stream-auth');
+const streamAuth = require('@toolkitx/microsoft-stream-auth');
 const result = await streamAuth({account: 'User Account', pwd: 'User Password'});
 ```
 
@@ -40,4 +40,4 @@ Then you will get below object:
 npm test
 ```
 
-Enjoy!
+### Enjoy!
