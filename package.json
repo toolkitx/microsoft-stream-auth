@@ -1,5 +1,5 @@
 {
-  "name": "microsoft-stream-auth",
+  "name": "@toolkitx/microsoft-stream-auth",
   "version": "0.0.1",
   "description": "A temporary, light-weight, high-performance solution to get access token of Microsoft Stream without any browser technologies like Chrome/Selenium.",
   "main": "index.js",
