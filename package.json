@@ -1,0 +1,29 @@
+{
+  "name": "microsoft-stream-auth",
+  "version": "0.0.0",
+  "description": "A temporary, light-weight, high-performance solution to get access token of Microsoft Stream without any browser technologies like Chrome/Selenium.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha  --timeout 20000",
+    "prelib:publish": "npm run lib:update-version",
+    "lib:update-version": "npm version patch",
+    "lib:publish": "npm publish --access=public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/toolkitx/microsoft-stream-auth.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/toolkitx/microsoft-stream-auth/issues"
+  },
+  "homepage": "https://github.com/toolkitx/microsoft-stream-auth#readme",
+  "dependencies": {
+    "request": "^2.88.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.2.2"
+  }
+}
