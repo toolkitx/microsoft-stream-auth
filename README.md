@@ -1,5 +1,7 @@
 ## @toolkitx/microsoft-stream-auth
 
+![CIStatus](https://github.com/toolkitx/microsoft-stream-auth/workflows/Node%20CI/badge.svg)
+
 A **temporary**, **light-weight**, **high-performance** solution to get access token of Microsoft Stream without any browser technologies like Chrome/Selenium.
 
 Why you need this? Accroading to the Office 365 roadmap, Microsoft doesn't provide any public APIs to access the Stream videos event you add API permissions to your app. So with the token get by `microsoft-stream-auth`, you can access the internal API of Stream, like upload video, download video etc.
