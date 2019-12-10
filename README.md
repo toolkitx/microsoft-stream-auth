@@ -4,6 +4,8 @@ A **temporary**, **light-weight**, **high-performance** solution to get access t
 
 Why you need this? Accroading to the Office 365 roadmap, Microsoft doesn't provide any public APIs to access the Stream videos event you add API permissions to your app. So with the token get by `microsoft-stream-auth`, you can access the internal API of Stream.
 
+![Demo](demo.gif)
+
 ### How it works
 
 The `microsoft-stream-auth` go through the login flow by sending HTTP requests. It means it might not work in the feature.
