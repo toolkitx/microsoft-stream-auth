@@ -5,7 +5,10 @@ var assert = require('assert');
 
 describe('Login', () => {
     it('should return accessToken and apiGatewayUri', async () => {
-        const rs = await login(credentials);
+        const account = process.env.TEST_ACCOUNT;
+        const pwd = process.env.TEST_PWD;
+        const cred = account && pwd ? {account, pwd} : credentials;
+        const rs = await login(cred);
         expect(rs.accessToken).to.not.be.null;
         expect(rs.apiGatewayUri).to.not.be.null;
         expect(rs.apiGatewayVersion).to.not.be.null;
