@@ -4,7 +4,7 @@
   "description": "A temporary, light-weight, high-performance solution to get access token of Microsoft Stream without any browser technologies like Chrome/Selenium.",
   "main": "index.js",
   "scripts": {
-    "test": "set TEST_ACCOUNT=$TEST_ACCOUNT && set TEST_PWD=$TEST_PWD && mocha --timeout 20000",
+    "test": "mocha --timeout 20000",
     "prelib:publish": "npm run lib:update-version",
     "lib:update-version": "npm version patch",
     "lib:publish": "npm publish --access=public"
