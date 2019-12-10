@@ -220,7 +220,8 @@ const getAccessToken = async(context) => {
         });
     });
 }
-export async function microsoftStreamAuth(credentials) {
+
+async function microsoftStreamAuth(credentials) {
     console.log('* Open web.microsoftstream.com');
     const authUrl = await startStep();
     console.log('* Redirect to login.microsoftonline.com');
@@ -238,4 +239,4 @@ export async function microsoftStreamAuth(credentials) {
     return token;
 };
 
-module.exports = microsoftStreamAuth;
+exports = module.exports = microsoftStreamAuth;
