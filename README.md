@@ -1,6 +1,6 @@
 ## @toolkitx/microsoft-stream-auth
 
-![CIStatus](https://github.com/toolkitx/microsoft-stream-auth/workflows/Node%20CI/badge.svg) [![npm version](https://badge.fury.io/js/%40toolkitx%2Fmicrosoft-stream-auth.svg)](https://badge.fury.io/js/%40toolkitx%2Fmicrosoft-stream-auth)
+![CIStatus](https://github.com/toolkitx/microsoft-stream-auth/workflows/Daily/badge.svg) [![npm version](https://badge.fury.io/js/%40toolkitx%2Fmicrosoft-stream-auth.svg)](https://badge.fury.io/js/%40toolkitx%2Fmicrosoft-stream-auth)
 
 A **temporary**, **light-weight**, **high-performance** solution to get access token of Microsoft Stream without any browser technologies like Chrome/Selenium.
 
