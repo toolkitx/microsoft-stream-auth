@@ -1,4 +1,4 @@
-name: Node CI
+name: Daily
 
 on:
   push:
