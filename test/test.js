@@ -13,6 +13,7 @@ describe('Login', () => {
         expect(rs.apiGatewayUri).to.not.be.null;
         expect(rs.apiGatewayVersion).to.not.be.null;
         expect(rs.accessTokenExpiry).to.not.be.null;
+        console.log(rs)
         assert.ok(true);
     });
 });

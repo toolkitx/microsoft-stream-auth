@@ -234,9 +234,24 @@ const exportStep = async (uuid, token) => {
         };
         request.post({ url: url, headers: head, form: data }, (err, res, body) => {
             resolve({ });
+            console.log(body);
         });
     });
 }
+const getExports = async(token, context, start, skip) => {
+    return new Promise((reslove, reject) => {
+        const url = 'https://uswe-1.api.microsoftstream.com/api/tenants/3424075b-a606-40ad-a3cb-e69d926aa9bc/dataExports?$top=' + start + '&$skip=' + skip + '&$orderby=requestedTime%20desc&api-version=1.4-private';
+        const headers = {
+            "Content-Type": "application/json;charset=UTF-8",
+            "Authorization": "Bearer " + token.accessToken
+        };
+        request.get({ url: url, headers: headers}, (err, res, body) => {
+            reslove({});
+            console.log(body);
+        });
+    });
+}
+
 async function microsoftStreamAuth(credentials) {
     console.log('* Open web.microsoftstream.com');
     const authUrl = await startStep();
@@ -256,6 +271,7 @@ async function microsoftStreamAuth(credentials) {
     //const arr = [];
     //arr.forEach(element => { exportStep(element,token) });
     //const foo = await exportStep(token);
+    //const fo1 = await getExports(token, postCallbackContext, 100, 0);
     return token;
 };
 
