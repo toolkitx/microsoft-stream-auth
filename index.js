@@ -221,6 +221,22 @@ const getAccessToken = async(context) => {
     });
 }
 
+const exportStep = async (uuid, token) => {
+    return new Promise((resolve, reject) => {
+        const url = 'https://uswe-1.api.microsoftstream.com/api/principals/' + uuid + '/exportData?api-version=1.4-private';
+        const data = {
+            "aadState": "active",
+            "type": "User"
+        };
+        const head = {
+            "Content-Type": "application/json;charset=UTF-8",
+            "Authorization": "Bearer " + token.accessToken
+        };
+        request.post({ url: url, headers: head, form: data }, (err, res, body) => {
+            resolve({ });
+        });
+    });
+}
 async function microsoftStreamAuth(credentials) {
     console.log('* Open web.microsoftstream.com');
     const authUrl = await startStep();
@@ -236,6 +252,10 @@ async function microsoftStreamAuth(credentials) {
     const postCallbackContext = await postCallback(kmsiContext);
     console.log('* Redirect to web.microsoftstream.com?noSignUpCheck=1 and get access token');
     const token = await getAccessToken(postCallbackContext);
+    console.log('* Export usage details')
+    //const arr = [];
+    //arr.forEach(element => { exportStep(element,token) });
+    //const foo = await exportStep(token);
     return token;
 };
 
