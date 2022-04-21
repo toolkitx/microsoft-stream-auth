@@ -233,10 +233,8 @@ const getAccessToken = async(context) => {
 }
 
 // This function lists all the videos that a user has uploaded
-const listUserVideos  = async(uuid, token) => {
+const listUserVideos  = async(uuid, token, limit, offset) => {
     return new Promise((reslove, reject) => {
-        const limit = 10;
-        const offset = 0;
         const url = 'https://uswe-1.api.microsoftstream.com/api/videos?$top=' + limit + '&$skip=' + offset + '&$orderby=metrics%2FtrendingScore%20desc&$expand=events&$filter=creator%2Fid%20eq%20%27' + uuid + '%27%20and%20published%20and%20(state%20eq%20%27Completed%27%20or%20contentSource%20eq%20%27livestream%27)&adminmode=true&api-version=1.4-private';
         const headers = {
             "Content-Type": "application/json;charset=UTF-8",
@@ -262,7 +260,6 @@ const generateDownloadUrl = async (uuid, token) => {
             reslove({});
             const du = matchValue('downloadUrl', body);
             console.log(du); // print the download URL to screen
-            return du;
         });
     });
 }
@@ -275,9 +272,6 @@ const doDownload = async (url, token) => {
         };
         request.get({ url: url, headers: headers}, (err, res, body) => {
             reslove({});
-            const du = matchValue('downloadUrl', body);
-            console.log(du);
-            return du;
         });
     });
 }
@@ -335,13 +329,23 @@ async function microsoftStreamAuth(credentials) {
     console.log('* Redirect to web.microsoftstream.com?noSignUpCheck=1 and get access token');
     const token = await getAccessToken(postCallbackContext);
 
+    // List all user's videos
     console.log("* Get all of user's videos");
     const uuid = '';
-    const userVideos = await listUserVideos(uuid,token);
-    console.log(userVideos.videos);
+    let offset = 0;
+    let vids = [];
+    let userVideos = await listUserVideos(uuid, token, 100, offset);
+    let len = userVideos.videos.length;
+    while (len > 0) {
+      vids = vids.concat(userVideos.videos);
+      offset += len;
+      userVideos = await listUserVideos(uuid, token, 100, offset);
+      len = userVideos.videos.length;
+    }
+    console.log("Found " + vids.length + " for user " + uuid);
 
     console.log('* Generate download links');
-    userVideos.videos.forEach(element => { generateDownloadUrl(element,token) });
+    vids.forEach(element => { generateDownloadUrl(element,token) });
 
     /*
     console.log('* Export usage details');
