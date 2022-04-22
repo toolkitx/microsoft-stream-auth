@@ -18,7 +18,7 @@ module.exports = {
 Then, run the script
 ```bash
 # via docker
-docker build -t mstream:latest .
+./mstream.sh build
 ./mstream.sh
 
 ```
