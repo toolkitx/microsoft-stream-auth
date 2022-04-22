@@ -353,7 +353,7 @@ async function fetchUserVideoInfos(videoUserUuid, token) {
       userVideos = await fetchUserVideosInfo(videoUserUuid, token, 100, offset);
       len = userVideos.length;
     }
-    console.log("Found " + vids.length + "videos for user " + videoUserUuid);
+    console.log("Found " + vids.length + " videos for user " + videoUserUuid);
 
     console.log('* Fetch video infos');
 
