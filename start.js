@@ -1,13 +1,15 @@
 const credentials = require('./test/config');
-const login = require('./index');
+const { login, fetchUserVideoInfos } = require('./index');
 
 const main = async () => {
-    const account = process.env.TEST_ACCOUNT;
-    const pwd = process.env.TEST_PWD;
-    const cred = account && pwd ? {account, pwd} : credentials;
-    console.log(cred)
-    const rs = await login(cred);
-    console.log(rs)
+    const account = process.env.TEST_ACCOUNT || credentials.account;
+    const pwd = process.env.TEST_PWD || credentials.pwd;
+    const userUuid = process.env.TEST_USER_UUID || credentials.userUuid;
+
+    const token = await login({ account, pwd});
+    const videoInfos = await fetchUserVideoInfos(userUuid, token);
+
+    console.log("VideoInfos", videoInfos);
 }
 
 main();
