@@ -15,12 +15,12 @@ function fileExists(path) {
     return fs.existsSync(path);
 }
 
-function readFromFile(path) {
+function readJsonFromFile(path) {
     const data = fs.readFileSync(path);
     return JSON.parse(data);
 }
 
-function writeToFile(path, json) {
+function writeJsonToFile(path, json) {
     let data = JSON.stringify(json);
     return fs.writeFileSync(path, data);
 }
@@ -28,6 +28,6 @@ function writeToFile(path, json) {
 module.exports = {
     ensureDirExists,
     fileExists,
-    readFromFile,
-    writeToFile,
+    readJsonFromFile,
+    writeJsonToFile,
 };

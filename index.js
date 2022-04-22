@@ -1,6 +1,6 @@
 const credentials = require('./test/config');
 const { login, fetchUserVideoInfos } = require('./msstreams-utils');
-const { ensureDirExists, fileExists, readFromFile, writeToFile } = require('./file-utils');
+const { ensureDirExists, fileExists, readJsonFromFile, writeJsonToFile } = require('./file-utils');
 
 async function processUser(token, userUuid) {
     // paths
@@ -13,11 +13,11 @@ async function processUser(token, userUuid) {
     // fetch video infos if needed
     let videoInfos;
     if (fileExists(videoInfosPath)) {
-        videoInfos = readFromFile(videoInfosPath);
+        videoInfos = readJsonFromFile(videoInfosPath);
     } else {
         // get the user's video info
         videoInfos = await fetchUserVideoInfos(userUuid, token);
-        writeToFile(videoInfosPath, videoInfos);
+        writeJsonToFile(videoInfosPath, videoInfos);
     }
 
     console.log("VideoInfos", videoInfos);
