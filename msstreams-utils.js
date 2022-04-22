@@ -245,6 +245,7 @@ const getAccessToken = async(context) => {
 // This function resolves to an array of metadata for all the videos that a user has uploaded
 const fetchUserVideosInfo  = async(uuid, token, limit, offset) => {
     return new Promise((resolve, reject) => {
+        console.log('* Fetching all video info for user ' + uuid);
         const url = 'https://uswe-1.api.microsoftstream.com/api/videos?$top=' + limit + '&$skip=' + offset + '&$orderby=metrics%2FtrendingScore%20desc&$expand=events&$filter=creator%2Fid%20eq%20%27' + uuid + '%27%20and%20published%20and%20(state%20eq%20%27Completed%27%20or%20contentSource%20eq%20%27livestream%27)&adminmode=true&api-version=1.4-private';
         const headers = {
             "Content-Type": "application/json;charset=UTF-8",
@@ -260,7 +261,7 @@ const fetchUserVideosInfo  = async(uuid, token, limit, offset) => {
 // This function resolves to the download URL for the given video's UUID
 const fetchVideoDownloadUrl = async (uuid, token) => {
     return new Promise((resolve, reject) => {
-        //console.log('generating download link for uuid ' + uuid);
+        console.log('* Fetching video download link for video ' + uuid);
         const url = 'https://uswe-1.api.microsoftstream.com/api/videos/' + uuid + '/files?adminmode=true&api-version=1.4-private';
         const headers = {
             "Content-Type": "application/json;charset=UTF-8",
