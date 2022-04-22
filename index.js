@@ -1,4 +1,4 @@
-const credentials = require('./test/config');
+const credentials = require('./config');
 const { login, fetchUserVideoInfos, downloadVideo } = require('./msstreams-utils');
 const { ensureDirExists, fileExists, readJsonFromFile, writeJsonToFile } = require('./file-utils');
 
