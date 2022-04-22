@@ -2,5 +2,8 @@
 module.exports = {
     account: 'Your account',
     pwd: 'Your Password',
-    userUuid: 'Video User UUID',
+    userUuids: [
+        'Video User UUID1',
+        'Video User UUID2',
+    ]
 }

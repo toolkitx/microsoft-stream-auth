@@ -2,15 +2,7 @@ const credentials = require('./test/config');
 const { login, fetchUserVideoInfos } = require('./msstreams-utils');
 const { ensureDirExists, fileExists, readFromFile, writeToFile } = require('./file-utils');
 
-const main = async () => {
-    // basic credentials
-    const account = process.env.TEST_ACCOUNT || credentials.account;
-    const pwd = process.env.TEST_PWD || credentials.pwd;
-    const userUuid = process.env.TEST_USER_UUID || credentials.userUuid;
-
-    // get the account token
-    const token = await login({ account, pwd});
-
+async function processUser(token, userUuid) {
     // paths
     const userDir = `./output/${userUuid}`;
     const videoInfosPath = `${userDir}/videos.json`;
@@ -29,6 +21,21 @@ const main = async () => {
     }
 
     console.log("VideoInfos", videoInfos);
+}
+
+const main = async () => {
+    // basic credentials
+    const account = process.env.TEST_ACCOUNT || credentials.account;
+    const pwd = process.env.TEST_PWD || credentials.pwd;
+    const userUuids = credentials.userUuids;
+
+    // get the account token
+    const token = await login({ account, pwd});
+
+    // process all users
+    for (const userUuid of userUuids) {
+        await processUser(token, userUuid);
+    }
 }
 
 main();
