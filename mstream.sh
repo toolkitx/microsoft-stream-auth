@@ -1,4 +1,5 @@
 #!/bin/bash
 
 # docker build -t mstream:latest .
-docker run --rm -it mstream:latest npm run start
+mkdir -p output
+docker run --rm -it -v ${PWD}/output:/usr/src/app/output mstream:latest npm run start
