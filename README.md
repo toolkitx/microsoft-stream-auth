@@ -1,3 +1,70 @@
+# Microsoft Streams Video Scrapper
+
+This downloads Microsoft Streams videos for a list of users, and saves the meta data and video files in the `output` directory.
+
+## Get Started
+Update `config.js` with your credentials and list of user UUIDs whose videos to download:
+```javascript
+module.exports = {
+    account: 'myemail@domain.com',
+    pwd: 'abcdef',
+    userUuids: [
+        'user1-uuid',
+        'user2-uuid',
+    ]
+}
+```
+
+Then, run the script
+```bash
+# via docker
+docker build -t mstream:latest .
+docker run --rm -it -v ${PWD}:/usr/src/app mstream:latest npm run start
+
+```
+
+or
+```bash
+# via node
+npm install
+npm run start
+```
+
+The files will be saved to the `output` directory
+```
+output/
+    user1-uuid/
+        videos.json
+        videos/
+            user1-video1-uuid-and-video-name.mp4
+            user1-video2-uuid-and-video-name.mp4
+            user1-video3-uuid-and-video-name.mp4
+            user1-video4-uuid-and-video-name.mp4
+    user2-uuid/
+        videos.json
+        videos/
+            user2-video1-uuid-and-video-name.mp4
+            user2-video2-uuid-and-video-name.mp4
+            user2-video3-uuid-and-video-name.mp4
+            user2-video4-uuid-and-video-name.mp4
+```
+
+## Notes
+
+This tool will detect files that have already been downloaded and skip downloading those again. So, it is okay to run to multiple times to continue downloading and it'll pick up from where it left off.
+
+When a video is downloading, it will be saved with `.tmp` extension. When the download is finished, it'll be renamed to the properly name. `.tmp` files are deleted when re-running the tool to download a file.
+
+Video files are downloaded serially. There is room for improvement if parallelization is needed.
+
+## Questions
+
+Video files are assumped to be MP4. Is this correct?
+
+---
+
+## Old README content
+
 ## @toolkitx/microsoft-stream-auth
 
 ![CIStatus](https://github.com/toolkitx/microsoft-stream-auth/workflows/Daily/badge.svg) [![npm version](https://badge.fury.io/js/%40toolkitx%2Fmicrosoft-stream-auth.svg)](https://badge.fury.io/js/%40toolkitx%2Fmicrosoft-stream-auth)
