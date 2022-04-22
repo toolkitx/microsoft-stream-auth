@@ -1,5 +1,6 @@
 const credentials = require('./test/config');
-const { login, fetchUserVideoInfos } = require('./index');
+const { login, fetchUserVideoInfos } = require('./msstreams-utils');
+
 
 const main = async () => {
     const account = process.env.TEST_ACCOUNT || credentials.account;
