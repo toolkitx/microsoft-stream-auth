@@ -65,15 +65,15 @@ const createBaseCookieHeader = (cookieItems) => {
     }
 }
 const startStep = async () => {
-    return new Promise((reslove, reject) => {
+    return new Promise((resolve, reject) => {
         request.get({url: homePage, followRedirect: false}, (err, res, body) => {
             streamCookies = getCookieObject(res.headers['set-cookie']);
-            reslove(res.headers['location']);
+            resolve(res.headers['location']);
         });
     });
 }
 const goAuthorizeStep = async (url) => {
-    return new Promise((reslove, reject) => {
+    return new Promise((resolve, reject) => {
         request.get(url, (err, res, body) => {
             const flowToken = matchValue('sFT', body);
             const originalRequest = matchValue('sCtx', body);
@@ -82,12 +82,12 @@ const goAuthorizeStep = async (url) => {
             const canary = matchValue('canary', body); // canary in next step
             const requestId = res.headers['x-ms-request-id']; //hpgrequestid in next step
             const authorizeCookies = getCookieObject(res.headers['set-cookie']);
-            reslove({ requestId, authorizeCookies, flowToken, originalRequest, apiCanary, correlationId, canary });
+            resolve({ requestId, authorizeCookies, flowToken, originalRequest, apiCanary, correlationId, canary });
         });
     });
 }
 const getCredentialStep = async (context, account) => {
-    return new Promise((reslove, reject) => {
+    return new Promise((resolve, reject) => {
         const url = 'https://login.microsoftonline.com/common/GetCredentialType?mkt=en-US';
         const data = {
             "username": account.account,
@@ -117,13 +117,13 @@ const getCredentialStep = async (context, account) => {
             const apiCanary = body.apiCanary;
             const requestId = res.headers['x-ms-request-id'];
             const credentialCookies = getCookieObject(res.headers['set-cookie']);
-            reslove({ requestId, credentialCookies, flowToken, originalRequest, apiCanary });
+            resolve({ requestId, credentialCookies, flowToken, originalRequest, apiCanary });
         });
     });
 }
 
 const loginStep = async (authContext, credContext, account) => {
-    return new Promise((reslove, reject) => {
+    return new Promise((resolve, reject) => {
         const url = 'https://login.microsoftonline.com/common/login';
         const data = {
             "i13": "0",
@@ -168,12 +168,12 @@ const loginStep = async (authContext, credContext, account) => {
             const canary = matchValue('canary', body);
             const requestId = res.headers['x-ms-request-id'];
             const loginCookies = getCookieObject(res.headers['set-cookie']);
-            reslove({ requestId, loginCookies, flowToken, originalRequest, apiCanary, correlationId, canary });
+            resolve({ requestId, loginCookies, flowToken, originalRequest, apiCanary, correlationId, canary });
         });
     });
 }
 const kmsiStep = async (context) => {
-    return new Promise((reslove, reject) => {
+    return new Promise((resolve, reject) => {
         const url = 'https://login.microsoftonline.com/kmsi';
         const data = {
             "LoginOptions": "1",
@@ -194,12 +194,12 @@ const kmsiStep = async (context) => {
         request.post({ url: url, headers: headers, form: data }, (err, res, body) => {
             getCookieObject(res.headers['set-cookie']);
             const state = getSessionInfo(body);
-            reslove(state);
+            resolve(state);
         });
     });
 }
 const postCallback = async (data) => {
-    return new Promise((reslove, reject) => {
+    return new Promise((resolve, reject) => {
         const url = 'https://web.microsoftstream.com/';
         const headers = {
             'Referer': 'https://login.microsoftonline.com/',
@@ -212,12 +212,12 @@ const postCallback = async (data) => {
         request.post({ url: url, headers: headers, form: formData }, (err, res, body) => {
             const postCookies = getCookieObject(res.headers['set-cookie'], true);
             const redirectUrl = res.headers['location'];
-            reslove({postCookies, redirectUrl});
+            resolve({postCookies, redirectUrl});
         });
     });
 }
 const getAccessToken = async(context) => {
-    return new Promise((reslove, reject) => {
+    return new Promise((resolve, reject) => {
         const url = context['redirectUrl'];
         const headers = {
             'Cookie': createBaseCookieHeader(context['postCookies'])
@@ -227,14 +227,14 @@ const getAccessToken = async(context) => {
             const apiGatewayUri = matchValue('ApiGatewayUri', body);
             const apiGatewayVersion = matchValue('ApiGatewayVersion', body);
             const accessTokenExpiry = matchValue('AccessTokenExpiry', body);
-            reslove({accessToken, apiGatewayUri, apiGatewayVersion, accessTokenExpiry});
+            resolve({accessToken, apiGatewayUri, apiGatewayVersion, accessTokenExpiry});
         });
     });
 }
 
 // This function lists all the videos that a user has uploaded
 const listUserVideos  = async(uuid, token, limit, offset) => {
-    return new Promise((reslove, reject) => {
+    return new Promise((resolve, reject) => {
         const url = 'https://uswe-1.api.microsoftstream.com/api/videos?$top=' + limit + '&$skip=' + offset + '&$orderby=metrics%2FtrendingScore%20desc&$expand=events&$filter=creator%2Fid%20eq%20%27' + uuid + '%27%20and%20published%20and%20(state%20eq%20%27Completed%27%20or%20contentSource%20eq%20%27livestream%27)&adminmode=true&api-version=1.4-private';
         const headers = {
             "Content-Type": "application/json;charset=UTF-8",
@@ -242,14 +242,14 @@ const listUserVideos  = async(uuid, token, limit, offset) => {
         };
         request.get({ url: url, headers: headers}, (err, res, body) => {
             const videos = matchValues('id', body);
-            reslove({videos});
+            resolve({videos});
         });
     });
 }
 
 // This function gets the download URL for the given video's UUID
 const generateDownloadUrl = async (uuid, token) => {
-    return new Promise((reslove, reject) => {
+    return new Promise((resolve, reject) => {
         //console.log('generating download link for uuid ' + uuid);
         const url = 'https://uswe-1.api.microsoftstream.com/api/videos/' + uuid + '/files?adminmode=true&api-version=1.4-private';
         const headers = {
@@ -257,7 +257,7 @@ const generateDownloadUrl = async (uuid, token) => {
             "Authorization": "Bearer " + token.accessToken
         };
         request.get({ url: url, headers: headers}, (err, res, body) => {
-            reslove({});
+            resolve({});
             const du = matchValue('downloadUrl', body);
             console.log(du); // print the download URL to screen
         });
@@ -266,12 +266,12 @@ const generateDownloadUrl = async (uuid, token) => {
 
 // Attempt to download a video based on URL generated by generateDownloadUrl()
 const doDownload = async (url, token) => {
-    return new Promise((reslove, reject) => {
+    return new Promise((resolve, reject) => {
         const headers = {
             'Cookie': createBaseCookieHeader(context['postCookies'])
         };
         request.get({ url: url, headers: headers}, (err, res, body) => {
-            reslove({});
+            resolve({});
         });
     });
 }
@@ -298,14 +298,14 @@ const exportStep = async (uuid, token) => {
 
 // This function generates a list of URLs so you can download a user's reports
 const getExports = async(token, context, start, skip) => {
-    return new Promise((reslove, reject) => {
+    return new Promise((resolve, reject) => {
         const url = 'https://uswe-1.api.microsoftstream.com/api/tenants/3424075b-a606-40ad-a3cb-e69d926aa9bc/dataExports?$top=' + start + '&$skip=' + skip + '&$orderby=requestedTime%20desc&api-version=1.4-private';
         const headers = {
             "Content-Type": "application/json;charset=UTF-8",
             "Authorization": "Bearer " + token.accessToken
         };
         request.get({ url: url, headers: headers}, (err, res, body) => {
-            reslove({});
+            resolve({});
             console.log(body);
         });
     });
