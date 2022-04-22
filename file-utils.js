@@ -1,4 +1,7 @@
 const fs = require('fs');
+const stream = require('stream');
+const { promisify } = require('util');
+const axios = require('axios');
 
 async function ensureDirExists(path) {
     try {
@@ -25,9 +28,34 @@ function writeJsonToFile(path, json) {
     return fs.writeFileSync(path, data);
 }
 
+async function downloadFile(fileUrl, headers, filePath) {
+    const tempFilePath = `${filePath}.tmp`;
+
+    // delete temp file if it exists
+    if (fs.existsSync(tempFilePath)) {
+        fs.unlinkSync(tempFilePath)
+    }
+
+    const finished = promisify(stream.finished);
+    const writer = fs.createWriteStream(tempFilePath);
+    await axios({
+        method: 'get',
+        url: fileUrl,
+        responseType: 'stream',
+        headers,
+    }).then(async response => {
+        response.data.pipe(writer);
+        return await finished(writer);
+    });
+
+    // move file to real path
+    fs.renameSync(tempFilePath, filePath);
+}
+
 module.exports = {
     ensureDirExists,
     fileExists,
     readJsonFromFile,
     writeJsonToFile,
+    downloadFile,
 };
