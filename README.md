@@ -1,4 +1,4 @@
-# Microsoft Streams Video Scrapper
+# Microsoft Streams Video Downloader
 
 This downloads Microsoft Streams videos for a list of users, and saves the meta data and video files in the `output` directory.
 
