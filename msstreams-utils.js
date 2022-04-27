@@ -242,6 +242,38 @@ const getAccessToken = async(context) => {
     });
 }
 
+// TODO: This function retrieves all the channels for the account
+const getChannels  = async(token, limit, offset) => {
+    return new Promise((resolve, reject) => {
+        console.log('* Fetching all channels');
+        const url = 'https://uswe-1.api.microsoftstream.com/api/channels?adminmode=true&$top=' + limit + '&$skip=' + offset + '$orderby=metrics%2Ffollows%20desc&$expand=creator,group&$filter=isDefault%20eq%20false&api-version=1.4-private';
+        const headers = {
+            "Content-Type": "application/json;charset=UTF-8",
+            "Authorization": "Bearer " + token.accessToken
+        };
+        request.get({ url: url, headers: headers}, (err, res, body) => {
+            const channels = JSON.parse(body).value;
+            resolve(channels);
+        });
+    });
+}
+
+// This function resolves to an array of metadata for all the videos associated with a channel
+const fetchChannelVideosInfo  = async(uuid, token, limit, offset) => {
+    return new Promise((resolve, reject) => {
+        console.log('* Fetching all video info for channel ' + uuid);
+        const url = 'https://uswe-1.api.microsoftstream.com/api/channels/' + uuid +'/videos?$top=' + limit + '&$skip=' + offset + '&$filter=published%20and%20(state%20eq%20%27completed%27%20or%20contentSource%20eq%20%27livestream%27)&$expand=creator,events&adminmode=true&$orderby=metrics%2FtrendingScore%20desc&api-version=1.4-private';
+        const headers = {
+            "Content-Type": "application/json;charset=UTF-8",
+            "Authorization": "Bearer " + token.accessToken
+        };
+        request.get({ url: url, headers: headers}, (err, res, body) => {
+            const videos = JSON.parse(body).value;
+            resolve(videos);
+        });
+    });
+}
+
 // This function resolves to an array of metadata for all the videos that a user has uploaded
 const fetchUserVideosInfo  = async(uuid, token, limit, offset) => {
     return new Promise((resolve, reject) => {
@@ -318,7 +350,7 @@ const getExports = async(token, context, start, skip) => {
     });
 }
 
-async function microsoftStreamAuth(credentials, videoUserUuid) {
+async function microsoftStreamAuth(credentials) {
 
     // Do all the heavy lifting of getting an Access Token
     console.log('* Open web.microsoftstream.com');
@@ -338,6 +370,34 @@ async function microsoftStreamAuth(credentials, videoUserUuid) {
 
     return token;
 }
+
+async function fetchChannelVideoInfos(channelUuid, token) {
+    // List all channel's videos
+    console.log(`* Get all videos of channel ${channelUuid}`);
+    let offset = 0;
+    let vids = [];
+    let channelVideos = await fetchChannelVideosInfo(channelUuid, token, 100, offset);
+
+    let len = channelVideos.length;
+    while (len > 0) {
+      vids = vids.concat(channelVideos);
+      offset += len;
+      channelVideos = await fetchChannelVideosInfo(channelUuid, token, 100, offset);
+      len = channelVideos.length;
+    }
+    console.log("Found " + vids.length + " videos for channel " + channelUuid);
+
+    console.log('* Fetch video infos');
+
+    for (const videoInfo of vids) {
+        const videoUuid = videoInfo.id;
+        const downloadUrl = await fetchVideoDownloadUrl(videoUuid,token);
+        videoInfo.downloadUrl = downloadUrl;
+    };
+
+    console.log('* done');
+    return vids;
+};
 
 async function fetchUserVideoInfos(videoUserUuid, token) {
     // List all user's videos
@@ -363,12 +423,6 @@ async function fetchUserVideoInfos(videoUserUuid, token) {
         videoInfo.downloadUrl = downloadUrl;
     };
 
-    /*
-    console.log('* Export usage details');
-    const foo = await exportStep(uuid, token);
-    const fo1 = await getExports(token, postCallbackContext, 100, 0);
-    */
-
     console.log('* done');
     return vids;
 };
@@ -376,5 +430,7 @@ async function fetchUserVideoInfos(videoUserUuid, token) {
 exports = module.exports = {
     login: microsoftStreamAuth,
     fetchUserVideoInfos,
+    fetchChannelVideoInfos,
+    getChannels,
     downloadVideo,
 };
