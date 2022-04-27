@@ -262,7 +262,7 @@ const getChannels  = async(token, limit, offset) => {
 const fetchChannelVideosInfo  = async(uuid, token, limit, offset) => {
     return new Promise((resolve, reject) => {
         console.log('* Fetching all video info for channel ' + uuid);
-        const url = 'https://uswe-1.api.microsoftstream.com/api/channels/' + uuid +'/videos?$top=' + limit + '&$skip=' + offset + '&$filter=published%20and%20(state%20eq%20%27completed%27%20or%20contentSource%20eq%20%27livestream%27)&$expand=creator,events&adminmode=true&$orderby=metrics%2FtrendingScore%20desc&api-version=1.4-private';
+        const url = 'https://uswe-1.api.microsoftstream.com/api/channels/' + uuid + '/videos?$top=' + limit + '&$skip=' + offset + '&$filter=published%20and%20(state%20eq%20%27completed%27%20or%20contentSource%20eq%20%27livestream%27)&$expand=creator,events&adminmode=true&$orderby=metrics%2FtrendingScore%20desc&api-version=1.4-private';
         const headers = {
             "Content-Type": "application/json;charset=UTF-8",
             "Authorization": "Bearer " + token.accessToken

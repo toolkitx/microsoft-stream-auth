@@ -79,6 +79,7 @@ const main = async () => {
     const account = process.env.TEST_ACCOUNT || credentials.account;
     const pwd = process.env.TEST_PWD || credentials.pwd;
     const userUuids = credentials.userUuids;
+    const channelUuids = credentials.channelUuids;
 
     // get the account token
     console.log(`** Get account token for ${account} **`);
@@ -88,7 +89,6 @@ const main = async () => {
     console.log(`** Done getting account token for ${account} **`);
     console.log();
 
-/*
     // process all users
     for (const userUuid of userUuids) {
         console.log(`** Processing user ${userUuid} **`);
@@ -98,16 +98,14 @@ const main = async () => {
         console.log(`** Done processing user ${userUuid} **`);
         console.log();
     }
-*/
 
     // process all channels
-    const channels = await getChannels(token, 100, 0);
-    for (const channelUuid of channels) {
-        console.log(`** Processing channel ${userUuid} **`);
+    for (const channelUuid of channelUuids) {
+        console.log(`** Processing channel ${channelUuid} **`);
 
         await processChannel(token, channelUuid);
 
-        console.log(`** Done processing channel ${userUuid} **`);
+        console.log(`** Done processing channel ${channelUuid} **`);
         console.log();
     }
 }
