@@ -1,31 +1,73 @@
-## @toolkitx/microsoft-stream-auth
+# @toolkitx/microsoft-stream-auth
 
 ![CIStatus](https://github.com/toolkitx/microsoft-stream-auth/workflows/Daily/badge.svg) [![npm version](https://badge.fury.io/js/%40toolkitx%2Fmicrosoft-stream-auth.svg)](https://badge.fury.io/js/%40toolkitx%2Fmicrosoft-stream-auth)
 
-A **temporary**, **light-weight**, **high-performance** solution to get access token of Microsoft Stream without any browser technologies like Chrome/Selenium.
+A **temporary**, **light-weight**, **high-performance** solution to get a Microsoft Stream access token without any browser technologies like Chrome/Selenium.
 
-Why you need this? Accroading to the Office 365 roadmap, Microsoft doesn't provide any public APIs to access the Stream videos event you add API permissions to your app. So with the token get by `microsoft-stream-auth`, you can access the internal API of Stream, like upload video, download video etc.
+## Why would you need this?
+
+According to the ![Office 365 Roadmap](https://www.microsoft.com/en-us/microsoft-365/roadmap?ms.url=roadmap&rtc=1&filters=), Microsoft doesn't provide any public APIs to access the Stream videos even if you add API permissions to your app. So with the token gathered by `microsoft-stream-auth`, you can access the internal API of Stream like uploading videos, downloading videos, etc.
 
 ![Demo](demo.gif)
 
-### How it works
+## How it works
 
-The `microsoft-stream-auth` go through the login flow by sending HTTP requests. It means it might not work in the feature.
+The `microsoft-stream-auth` goes through the login process by sending HTTP requests to `login.microsoftonline.com`
 
-### Installation
+> :warning: **WARNING: By using HTTP Requests, this does not guarantee that this tool will work in the future. If this tool is currently broken please submit an issue.**
+
+
+## Installation
+
+### Option 1 (Install the Package)
 
 ```bash
 npm install @toolkitx/microsoft-stream-auth
 ```
 
-### Simple to use
+Create a `config.js` file in the same directory as the installed package with the following code
 
 ```javascript
-const streamAuth = require('@toolkitx/microsoft-stream-auth');
-const result = await streamAuth({account: 'User Account', pwd: 'User Password'});
+module.exports = {
+    account: '<insert account email here>',
+    pwd: '<insert account password here>'
+}
 ```
 
-Then you will get below object:
+Then, create an `index.js` file also in the same directory with the following code
+
+```javascript
+const cred = require('./config');
+const login = require('@toolkitx/microsoft-stream-auth');
+
+(async () => {
+    const token = await login(cred);
+    console.log(token);
+})();
+```
+
+Finally, run the code with
+
+```bash
+node index.js
+```
+
+### Option 2 (Clone the Repo)
+
+```bash
+git clone https://github.com/toolkitx/microsoft-stream-auth.git
+cd microsoft-stream-auth
+npm install
+```
+
+Add your account email and password to `test/config.js`, then run the following command
+
+```bash
+npm run test
+```
+
+
+In both installation cases you should get an object similar to the following if successful
 
 ```json
 {
@@ -36,12 +78,5 @@ Then you will get below object:
 }
 ```
 
-### How to run test
-
-1. Set your account and password in test/config.js
-2. Run below command:
-```bash
-npm test
-```
 
 ### Enjoy!

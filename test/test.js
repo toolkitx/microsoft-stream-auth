@@ -9,6 +9,7 @@ describe('Login', () => {
         const pwd = process.env.TEST_PWD;
         const cred = account && pwd ? {account, pwd} : credentials;
         const rs = await login(cred);
+        console.log(rs);
         expect(rs.accessToken).to.not.be.null;
         expect(rs.apiGatewayUri).to.not.be.null;
         expect(rs.apiGatewayVersion).to.not.be.null;
